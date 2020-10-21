@@ -9,6 +9,7 @@ apply plugin: 'java-gradle-plugin'
 
 group = 're.notifica.gradle'
 version = '1.0.0'
+project.ext.artifactChannel = 'releases'
 project.ext.archivesBaseName = 'notificare-services'
 project.ext.pomDesc = 'Gradle plug-in to build Notificare applications.'
 
@@ -28,7 +29,7 @@ dependencies {
 gradlePlugin {
     // Define the plugin
     plugins {
-        notificareServicesPlugin {
+        notificareServices {
             id = 're.notifica.gradle.notificare-services'
             implementationClass = 're.notifica.gradle.NotificareServicesPlugin'
         }
@@ -36,6 +37,12 @@ gradlePlugin {
 }
 
 apply from: 'publish.gradle'
+
+if (project.hasProperty('aws_access_key_id') && project.hasProperty('aws_secret_access_key')) {
+    project.ext.awsAccessKeyId = findProperty('aws_access_key_id');
+    project.ext.awsSecretAccessKey = findProperty('aws_secret_access_key');
+    apply from: 's3publish.gradle'
+}
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8

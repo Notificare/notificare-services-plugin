@@ -1,0 +1,24 @@
+apply plugin: 'maven-publish'
+
+jar {
+    from 'LICENSE'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId project.ext.archivesBaseName
+        }
+    }
+    repositories {
+        maven {
+            name 'S3'
+            url "s3://maven.notifica.re/${rootProject.ext.artifactChannel}"
+            credentials(AwsCredentials) {
+                accessKey rootProject.ext.awsAccessKeyId
+                secretKey rootProject.ext.awsSecretAccessKey
+            }
+        }
+    }
+}
+

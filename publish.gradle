@@ -4,23 +4,17 @@ jar {
     from 'LICENSE'
 }
 
-groovydoc {
-    exclude     "**/internal/**"
-    includePrivate false
-
-    docTitle project.ext.pomDesc
-    header ""
-    footer "Copyright (C) 2020 Notificare B.V."
-}
-
 publishing {
     publications {
         pluginMaven(MavenPublication) {
             artifactId project.ext.archivesBaseName
         }
     }
+    repositories {
+        maven {
+            name 'Local'
+            url "$buildDir/repo"
+        }
+    }
 }
 
-publishing.repositories.maven {
-    url "$buildDir/repo"
-}
