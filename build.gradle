@@ -13,6 +13,11 @@ project.ext.artifactChannel = 'releases'
 project.ext.archivesBaseName = 'notificare-services'
 project.ext.pomDesc = 'Gradle plug-in to build Notificare applications.'
 
+def properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+project.ext.aws_s3_access_key_id = System.env.AWS_ACCESS_KEY_ID ?: properties.getProperty('aws.s3.access_key_id')
+project.ext.aws_s3_secret_access_key = System.env.AWS_SECRET_ACCESS_KEY ?: properties.getProperty('aws.s3.secret_access_key')
+
 repositories {
     google()
     jcenter()
@@ -38,9 +43,7 @@ gradlePlugin {
 
 apply from: 'publish.gradle'
 
-if (project.hasProperty('aws_access_key_id') && project.hasProperty('aws_secret_access_key')) {
-    project.ext.awsAccessKeyId = findProperty('aws_access_key_id');
-    project.ext.awsSecretAccessKey = findProperty('aws_secret_access_key');
+if (project.hasProperty('aws_s3_access_key_id') && project.hasProperty('aws_s3_secret_access_key')) {
     apply from: 's3publish.gradle'
 }
 
