@@ -137,7 +137,7 @@ public class NotificareServicesTask extends DefaultTask {
 
         JsonObject rootObject = root.getAsJsonObject();
 
-        Map<String, String> resValues = new TreeMap<>();
+        Map<String, Object> resValues = new TreeMap<>();
         Map<String, Map<String, String>> resAttributes = new TreeMap<>();
 
         handleProjectInfo(rootObject, resValues);
@@ -159,8 +159,7 @@ public class NotificareServicesTask extends DefaultTask {
      * @param rootObject the root Json object.
      * @throws IOException
      */
-    private void handleProjectInfo(JsonObject rootObject, Map<String, String> resValues)
-            throws IOException {
+    private void handleProjectInfo(JsonObject rootObject, Map<String, Object> resValues) throws IOException {
         JsonObject projectInfo = rootObject.getAsJsonObject("project_info");
         if (projectInfo == null) {
             throw new GradleException("Missing project_info object");
@@ -185,27 +184,37 @@ public class NotificareServicesTask extends DefaultTask {
         resValues.put("notificare_services_application_secret", applicationSecret.getAsString());
 
         JsonPrimitive useTestApi = projectInfo.getAsJsonPrimitive("use_test_api");
-        if (useTestApi != null && useTestApi.getAsBoolean()) {
-            resValues.put("notificare_services_use_test_api", "true");
+        if (useTestApi != null) {
+            resValues.put("notificare_services_use_test_api", useTestApi.getAsBoolean());
         }
-
     }
 
-    private static String getValuesContent(
-            Map<String, String> values, Map<String, Map<String, String>> attributes) {
+    private String getValuesContent(Map<String, Object> values, Map<String, Map<String, String>> attributes) {
         StringBuilder sb = new StringBuilder(256);
 
         sb.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" + "<resources>\n");
 
-        for (Map.Entry<String, String> entry : values.entrySet()) {
+        for (Map.Entry<String, Object> entry : values.entrySet()) {
             String name = entry.getKey();
-            sb.append("    <string name=\"").append(name).append("\" translatable=\"false\"");
+            Object value = entry.getValue();
+
+            String type;
+            if (value instanceof String) {
+                type = "string";
+            } else if (value instanceof Boolean) {
+                type = "bool";
+            } else {
+                getProject().getLogger().warn("Unsupported property '" + name + "' with type '" + value.getClass().getSimpleName() + "'.");
+                continue;
+            }
+
+            sb.append("    <").append(type).append(" name=\"").append(name).append("\" translatable=\"false\"");
             if (attributes.containsKey(name)) {
                 for (Map.Entry<String, String> attr : attributes.get(name).entrySet()) {
                     sb.append(" ").append(attr.getKey()).append("=\"").append(attr.getValue()).append("\"");
                 }
             }
-            sb.append(">").append(entry.getValue()).append("</string>\n");
+            sb.append(">").append(value.toString()).append("</").append(type).append(">\n");
         }
 
         sb.append("</resources>\n");
