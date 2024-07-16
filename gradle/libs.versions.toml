@@ -4,14 +4,11 @@ kotlin = "2.0.0"
 android-gradle-api = "7.3.0"
 gradle-publish = "1.2.1"
 google-gson = "2.10.1"
-junit = "4.13.2"
 
 [libraries]
 android-gradle-api = { module = "com.android.tools.build:gradle-api", version.ref = "android-gradle-api" }
 google-gson = { module = "com.google.code.gson:gson", version.ref = "google-gson" }
-junit = { module = "junit:junit", version.ref = "junit" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 gradle-publish = { id = "com.gradle.plugin-publish", version.ref = "gradle-publish" }
-notificare-services = { id = "re.notifica.gradle.notificare-services", version.ref = "notificare-services" }
