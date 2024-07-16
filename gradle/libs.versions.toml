@@ -1,5 +1,5 @@
 [versions]
-notificare-services = "1.2.0-canary.1"
+notificare-services = "1.1.0-canary.1"
 kotlin = "2.0.0"
 android-gradle-api = "7.3.0"
 gradle-publish = "1.2.1"
