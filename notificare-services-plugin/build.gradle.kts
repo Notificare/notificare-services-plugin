@@ -1,7 +1,7 @@
 plugins {
     `java-gradle-plugin`
     alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.gradle.publish)
+    id("publish")
 }
 
 group = "re.notifica.gradle"

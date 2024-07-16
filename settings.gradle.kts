@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 rootProject.name = "notificare-services-plugin"
 
 include("notificare-services-plugin")
+includeBuild("build-logic")
