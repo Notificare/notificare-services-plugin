@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notificare_services_application_id" translatable="false">669117a79ac029178207cd96</string>
+    <string name="notificare_services_application_key" translatable="false">bba9adc47822ef89974e9e478e25c74bf6b61df423fd0de79ade3b538f499c6a</string>
+    <string name="notificare_services_application_secret" translatable="false">0ca3c00d82c1fc6722473cd51f7e97d02b34ca6f545240c996e010dee585af5b</string>
+    <string name="notificare_services_hosts_rest_api" translatable="false">push-test.notifica.re</string>
+    <string name="notificare_services_hosts_app_links" translatable="false">applinks-test.notifica.re</string>
+    <string name="notificare_services_hosts_short_links" translatable="false">test.ntc.re</string>
+</resources>

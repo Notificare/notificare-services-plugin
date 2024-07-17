@@ -72,6 +72,22 @@ class NotificareServicesPluginFunctionalTest {
     }
 
     @Test
+    fun `process file with custom hosts info`() {
+        val project = loadProject("app-with-custom-hosts-info", LATEST_AGP_VERSION)
+
+        val runner = createGradleRunner(GradleVersion.version(LATEST_GRADLE_VERSION), task = "assembleDebug")
+        val result = runner.build()
+
+        assertEquals(TaskOutcome.SUCCESS, result.task(":app:processDebugNotificareServices")?.outcome)
+        assertTrue(result.output.contains("Parsing json file: ${project.canonicalPath}/app/notificare-services.json"))
+
+        assertFileContentsAreEqual(
+            expected = File("src/functionalTest/testData/expectations/res-with-custom-hosts-info/values.xml"),
+            actual = project.resolve("app/build/generated/res/processDebugNotificareServices/values/values.xml")
+        )
+    }
+
+    @Test
     fun `fails when notificare services file is missing`() {
         loadProject("app-missing-notificare-services", LATEST_AGP_VERSION)
 
