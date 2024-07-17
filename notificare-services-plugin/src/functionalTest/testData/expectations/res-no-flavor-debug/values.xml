@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notificare_services_application_id" translatable="false">669117dcbc315f5446f16dda</string>
+    <string name="notificare_services_application_key" translatable="false">d2abcd09015df310228f0dc2aa8d00e4fb22e3e004d64c566cd2f3ec253290db</string>
+    <string name="notificare_services_application_secret" translatable="false">96de2bc7b9acf1b6ed880bb7e34d3e1d68120c6e2126be0306134ec559e9ccfd</string>
+</resources>
