@@ -14,7 +14,6 @@ import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
 import java.io.File
-import java.util.TreeMap
 
 private typealias ResValuesMap = Map<String, Any>
 private typealias MutableResValuesMap = MutableMap<String, Any>
@@ -68,7 +67,7 @@ abstract class NotificareServicesTask : DefaultTask() {
     }
 
     private fun parseJsonFileContents(file: File): ResValuesMap {
-        val resValues: MutableResValuesMap = TreeMap()
+        val resValues: MutableResValuesMap = LinkedHashMap()
 
         val root = JsonParser.parseReader(file.bufferedReader())
         if (!root.isJsonObject) {
@@ -76,6 +75,7 @@ abstract class NotificareServicesTask : DefaultTask() {
         }
 
         parseProjectInfo(root.asJsonObject, resValues)
+        parseHostsInfo(root.asJsonObject, resValues)
 
         return resValues
     }
@@ -93,13 +93,27 @@ abstract class NotificareServicesTask : DefaultTask() {
         val applicationSecret = projectInfo.getAsJsonPrimitive("application_secret")?.asString
             ?: throw GradleException("Missing project_info/application_secret object.")
 
-        val useTestApi = projectInfo.getAsJsonPrimitive("use_test_api")?.asBoolean
-
         resValues["notificare_services_application_id"] = applicationId
         resValues["notificare_services_application_key"] = applicationKey
         resValues["notificare_services_application_secret"] = applicationSecret
+    }
 
-        if (useTestApi != null) resValues["notificare_services_use_test_api"] = useTestApi
+    private fun parseHostsInfo(root: JsonObject, resValues: MutableResValuesMap) {
+        val hostsInfo = root.getAsJsonObject("hosts_info")
+            ?: return
+
+        val restApi = hostsInfo.getAsJsonPrimitive("rest_api")?.asString
+            ?: throw GradleException("Missing hosts_info/rest_api object.")
+
+        val appLinks = hostsInfo.getAsJsonPrimitive("app_links")?.asString
+            ?: throw GradleException("Missing hosts_info/app_links object.")
+
+        val shortLinks = hostsInfo.getAsJsonPrimitive("short_links")?.asString
+            ?: throw GradleException("Missing hosts_info/short_links object.")
+
+        resValues["notificare_services_hosts_rest_api"] = restApi
+        resValues["notificare_services_hosts_app_links"] = appLinks
+        resValues["notificare_services_hosts_short_links"] = shortLinks
     }
 
     private fun getValuesContent(values: ResValuesMap): String {
