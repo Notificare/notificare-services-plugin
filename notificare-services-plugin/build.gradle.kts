@@ -31,13 +31,14 @@ gradlePlugin {
 publishing {
     repositories {
         maven {
+            name = "Local"
             url = uri(layout.buildDirectory.dir("repo").map { it.asFile.path })
         }
     }
 }
 
 tasks.withType<Test>().configureEach {
-    dependsOn("publishAllPublicationsToMavenRepository")
+    dependsOn("publishAllPublicationsToLocalRepository")
 
     systemProperty("pluginRepo", layout.buildDirectory.dir("repo").get().asFile.absolutePath)
     systemProperty("pluginVersion", version)
